@@ -14,10 +14,10 @@ These scripts require the following software:
 ## raw data: 
 
 Start with the following raw data files:
-cue_matrix.csv - behavioral data from the task
-cue_ratings.csv – valence and arousal cue ratings (post task ratings)
-t1_raw.nii.gz – subjects t1-weighted anatomical scan
-cue1.nii.gz – functional task data
+- cue_matrix.csv -behavioral data from the task
+- cue_ratings.csv –valence and arousal cue ratings (post task ratings)
+- t1_raw.nii.gz –subjects t1-weighted anatomical scan
+- cue1.nii.gz –functional task data
 
 ## pre-processing pipeline
 
