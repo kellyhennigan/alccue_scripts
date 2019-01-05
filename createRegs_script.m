@@ -24,7 +24,7 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 
 % cell array of subject IDs to process (e.g., {'301','308','309'} )
 % subjects={'291','301','328'};
-subjects={'375'};
+subjects={'328','375'};
 
 nTRs = 444;
 
@@ -100,17 +100,17 @@ for s=1:numel(subjects)
         
         
         
-%         %%%%%%%%%%%%%%%%%%% img onset period: tr=2
-%         [reg,regc]=createRegTS(find(tr==2),1,nTRs,hrf,[regDir '/img_cue.1D']);
-%         
-%         
-%         %%%%%%%%%%%%%%%%%%% choice onset period: tr=3
-%         [reg,regc]=createRegTS(find(tr==3),1,nTRs,hrf,[regDir '/choice_cue.1D']);
-%         
-%         
-%         %%%%%%%%%%%%%%%%%%% choice period: tr=3 & tr=4
-%         [reg,regc]=createRegTS(find(tr==3 | tr==4),1,nTRs,hrf,[regDir '/choice2_cue.1D']);
-%         
+        %%%%%%%%%%%%%%%%%%% img onset period: tr=2
+        [reg,regc]=createRegTS(find(tr==2),1,nTRs,hrf,[regDir '/img_cue.1D']);
+        
+        
+        %%%%%%%%%%%%%%%%%%% choice onset period: tr=3
+        [reg,regc]=createRegTS(find(tr==3),1,nTRs,hrf,[regDir '/choice_cue.1D']);
+        
+        
+        %%%%%%%%%%%%%%%%%%% choice period: tr=3 & tr=4
+        [reg,regc]=createRegTS(find(tr==3 | tr==4),1,nTRs,hrf,[regDir '/choice2_cue.1D']);
+        
         
         %%%%%%%%%%%%%%%%%%% cue onset by trial type
         for i=1:4

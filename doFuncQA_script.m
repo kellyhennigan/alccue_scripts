@@ -6,8 +6,12 @@ clear all
 close all
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% DEFINE VARIABLES (EDIT AS NEEDED) %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % define relevant directories
-mainDir = '/Users/kelly/nicotinecue';
+mainDir = '/Users/kelly/cueexp_claudia';
 scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
 dataDir = [mainDir '/data'];
 figDir = [mainDir '/figures']; % where to save out figures
@@ -17,13 +21,13 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 task='cue';
 
 % cell array of subject ids to include in plots
-subjects={'pilot171111'};
+subjects={'301','375'};
 
 
-mp_file = [dataDir '/%s/func_proc/' task '_vr.1D']; % motion param file where %s is task
-roits_file = [dataDir '/%s/func_proc/' task '_nacc_afni.1D']; % roi time series file to plot where %s is task
+mp_file = [dataDir '/%s/func_proc/cue_vr.1D']; % motion param file 
+roits_file = [dataDir '/%s/func_proc/cue_nacc_ts.1D']; % roi time series file to plot 
 
-plotMotionLim = .5; % euclidean distance limit to plot
+plotMotionLim = 1; % euclidean distance limit to plot; 
 
 outDir = fullfile(figDir,'QA');
 
@@ -61,7 +65,7 @@ for s = 1:numel(subjects)
     
     nBadTRs = numel(find(en>plotMotionLim));
     fprintf(['\nsubject ' subject ' has ' num2str(nBadTRs) ' bad motion vols,\n' ...
-        'which is ' num2str(100.*nBadTRs./numel(en)) ' percent of task ' task ' trials\n\n'])
+        'which is ' num2str(100.*nBadTRs./numel(en)) ' percent of cue task trials\n\n'])
     
     task_nBadTRs(s) = nBadTRs;
     
@@ -69,7 +73,7 @@ for s = 1:numel(subjects)
     
     
     figH = figure;
-    set(gcf,'Visible','off')
+%     set(gcf,'Visible','off')
     set(gcf,'Color','w','InvertHardCopy','off','PaperPositionMode','auto');
     
     subplot(2,1,1)
@@ -90,7 +94,7 @@ for s = 1:numel(subjects)
     xlabel('TRs','FontSize',12)
     title('nacc roi ts','FontSize',14)
     
-    outName = [subject '_mp2_' task];
+    outName = [subject '_mp2_cue'];
     
     print(gcf,'-dpng','-r600',fullfile(outDir,outName));
     close all

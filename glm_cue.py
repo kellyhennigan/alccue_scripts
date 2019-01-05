@@ -10,9 +10,9 @@ import os,sys
 # EDIT AS NEEDED:
 
 
-data_dir = os.path.join(os.path.expanduser('~'),'nicotinecue','data')
+data_dir = os.path.join(os.path.expanduser('~'),'cueexp_claudia','data')
 
-subjects = ['pilot171111']
+subjects = ['328','375']
 
 # pre-processed functional data to analyze
 func_dir = 'func_proc'  	# relative to subject-specific directory
@@ -67,14 +67,14 @@ for subject in subjects:
 		'-stim_file 11 regs/choice_cuec.1D -stim_label 11 choice ' 
 		'-stim_file 12 regs/choicert_cuec.1D -stim_label 12 choice_rt ' 
 		'-stim_file 13 regs/alcohol_trial_cuec.1D -stim_label 13 alcohol ' 
-		'-stim_file 14 regs/cig_trial_cuec.1D -stim_label 14 cig ' 
+		'-stim_file 14 regs/drugs_trial_cuec.1D -stim_label 14 drugs ' 
 		'-stim_file 15 regs/food_trial_cuec.1D -stim_label 15 food ' 
 		'-stim_file 16 regs/neutral_trial_cuec.1D -stim_label 16 neutral ' 
 		'-num_glt 4 '					 # of contrasts
 		'-glt_label 1 alcohol-neutral -gltsym "SYM: +alcohol -neutral" ' 
-		'-glt_label 2 cig-neutral -gltsym "SYM: +cig -neutral" '
+		'-glt_label 2 drugs-neutral -gltsym "SYM: +drugs -neutral" '
 		'-glt_label 3 food-neutral -gltsym "SYM: +food -neutral" '
-		'-glt_label 4 cig-food -gltsym "SYM: +cig -food" '
+		'-glt_label 4 alcohol-food -gltsym "SYM: +alcohol -food" '
 		'-tout ' 					# output the partial and full model F
  		'-rout ' 					# output the partial and full model R2
  		#'-xout '						# print design matrix to the screen

@@ -95,7 +95,7 @@ plotRoiTimeCourses_script
 to save & plot ROI timecourses for events of interest
 
 
-## To make single-subject brain maps: 
+## Make single-subject and group brain maps: 
 <i>from a terminal command line, type:</i>
 ```
 python glm_cue.py
@@ -103,7 +103,6 @@ python glm_cue.py
 this script calls AFNI's 3dDeconvolve command to fit a GLM to a subject's fMRI data. 
 
 
-## To make group brain maps: 
 <i>from a terminal command line, type:</i>
 ```
 python ttest_2sample_cue.py
@@ -119,4 +118,12 @@ doFuncQA_script
 to save out some plots that display head motion
 
 
+## check out behavior
+<i>in matlab, run:</i> 
+```
+analyzeBehavior_script
+& 
+analyzeBehavior_singlesubject_script
+```
+to check out behavioral data
 

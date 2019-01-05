@@ -78,7 +78,7 @@ do
 
 
 	# motion correction & saves out the motion parameters in file, 'cue1_vr.1D' 
-	3dvolreg -Fourier -twopass -zpad 4 -dfile vr_cue.1D -base 4 -prefix mtcue1.nii.gz tcue1.nii.gz
+	3dvolreg -Fourier -twopass -zpad 4 -dfile cue_vr.1D -base 4 -prefix mtcue1.nii.gz tcue1.nii.gz
 
 
 	# create a “censor vector” that denotes bad movement volumes with a 0 and good volumes with a 1
