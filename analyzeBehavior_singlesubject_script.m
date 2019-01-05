@@ -13,7 +13,7 @@ close all
 
 
 % define relevant directories
-mainDir = '/Users/kelly/nicotinecue';
+mainDir = '/Users/kelly/cueexp_claudia';
 scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
 dataDir = [mainDir '/data'];
 figDir = [mainDir '/figures']; % where to save out figures
@@ -23,9 +23,9 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 task='cue';
 
 % subject id 
-subject='pilot171111';
+subject='301';
 
-conds = {'alcohol','cig','food','neutral'};
+conds = {'alcohol','drugs','food','neutral'};
 
 
 cols = []; % plot colors 

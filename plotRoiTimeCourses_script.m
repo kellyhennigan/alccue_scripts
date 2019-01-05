@@ -8,8 +8,13 @@ clear all
 close all
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%% DEFINE VARIABLES (EDIT AS NEEDED) %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 % define relevant directories
-mainDir = '/Users/kelly/nicotinecue';
+mainDir = '/Users/kelly/cueexp_claudia';
 scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
 dataDir = [mainDir '/data'];
 figDir = [mainDir '/figures']; % where to save out figures
@@ -19,7 +24,7 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 task='cue';
 
 % cell array of subject ids to include in plots
-subjects={'pilot171111'};
+subjects={'291','328','375'};
 
 tcDir = ['timecourses_' task '_afni' ];
 
@@ -27,7 +32,7 @@ tcPath = fullfile(dataDir,tcDir);
 
 
 % which rois to process?
-roiNames = {'nacc_desai','mpfc','ins_desai'};
+roiNames = {'nacc_desai'};
 
 
 nTRs = 10; % # of TRs to plot
@@ -47,14 +52,14 @@ plotColorSet = 'color'; % 'grayscale' or 'color'
 
 plotErr = 'shaded'; % 'bar' or 'shaded'
 
-% stims = {'alcohol','cig','food','neutral'}; % which stims to plot?
-% stimStr = 'stim';
+stims = {'alcohol','drugs','food','neutral'}; % which stims to plot?
+stimStr = 'stim';
 
-stims = {'strongdontwant','somewhatdontwant','somewhatwant','strongwant'}; % which stims to plot?
-stimStr = 'want';
+% stims = {'strongdontwant','somewhatdontwant','somewhatwant','strongwant'}; % which stims to plot?
+% stimStr = 'want';
 
 % rgb values for each plotted line corresponding to stims
-cols = cellfun(@(x) getCueExpColors(x,[],plotColorSet),stims,'uniformoutput',0);
+cols = cellfun(@(x) getCueExpColors(x),stims,'uniformoutput',0);
 
 % line specs for each plotted line 
 lspec = {'-','-','-','-'};
@@ -99,7 +104,7 @@ for r = 1:numel(roiNames)
     end
     
 %  upsample time courses
-if (useSpline)
+if useSpline
     t_orig = t;
     t = t(1):diff(t(1:2))/10:t(end); % upsampled x10 time course
     mean_tc = cellfun(@(x) spline(t_orig,x,t), mean_tc, 'uniformoutput',0);

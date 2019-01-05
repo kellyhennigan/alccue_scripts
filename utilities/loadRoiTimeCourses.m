@@ -29,7 +29,10 @@ end
 T=readtable(filepath);
 
 % all subjects listed in timecourse data file
-tc_subs = table2array(T(:,1)); 
+tc_subs = table2cell(T(:,1)); 
+if isnumeric(tc_subs{1})
+   tc_subs = cellfun(@num2str, tc_subs,'uniformoutput',0);
+end
 
 % all timecourse data  ***ASSUMES THAT the 1st TRs is TR 1, etc. 
 tc = table2array(T(:,2:end));

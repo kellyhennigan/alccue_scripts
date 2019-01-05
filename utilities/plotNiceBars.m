@@ -53,6 +53,9 @@ end
 if notDefined('groupNames')
     groupNames = strcat('group ',splitstring(num2str(1:nGroups)));
 end
+if isstr(groupNames)
+    groupNames={groupNames};
+end
 
 if notDefined('cols')
     cols = solarizedColors(nGroups);
