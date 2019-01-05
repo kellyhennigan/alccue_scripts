@@ -31,6 +31,7 @@ to be able to execute them.
 ## pre-processing pipeline
 
 (1) coregister subject's functional and anatomical data in native space and estimate the transform to bring subject's data into standard group space
+
 <i>from a terminal command line, type:</i> 
 ```
 ./preprocess_anat.sh
@@ -47,6 +48,7 @@ in afni viewer, load subject's anatomy and functional volume in tlrc space (file
 
 
 (2) run pre-processing steps on functional data 
+
 <i>from a terminal command line, type:</i> 
 ```
 ./preprocess_cue.sh
@@ -64,12 +66,21 @@ this script does the following using AFNI commands:
 
 
 
-(3) make regressor time series 
+(3) get stimulus onset times and make regressor time series 
+
 <i>from matlab command line, type:</i> 
 ```
 createRegs_script
 ```
 this script loads behavioral data to get stimulus onset times and saves out regressors of interest. Saved out files each contain a single vector of length equal to the number of TRs in the task with mostly 0 entries, and than 1 to indicate when an event of interest occurs. These vectors are then convolved with an hrf using AFNI's waver command to model the hemodynamic response. 
+
+Check out the output files: 
+<i>from a terminal command line, cd to output "regs" directory, then type, e.g.,:</i> 
+```
+1dplot food_cue_cuec.1D
+```
+
+** Note that the output files from this script are used for estimating single-subject GLMs and for plotting VOI timecourses. 
 
 
 ## To generate VOI timecourses: 
