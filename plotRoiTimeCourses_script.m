@@ -85,6 +85,11 @@ for r = 1:numel(roiNames)
         tc{c}=loadRoiTimeCourses(stimFile,subjects,1:nTRs);
     end % stims
     
+   % get the sample size (do it this way bc loadRoiTimeCourses() will
+   % return NaN values for desired subjects that don't have timecourse
+   % data, so this is returning the # of subjects that actually have data
+    n = sum(~isnan(tc{1}(:,1))); 
+        
     % make sure all the time courses are loaded
     if any(cellfun(@isempty, tc))
         tc
@@ -95,7 +100,7 @@ for r = 1:numel(roiNames)
     % subjects
     if numel(subjects)>1
         mean_tc = cellfun(@nanmean, tc,'uniformoutput',0);
-        se_tc = cellfun(@(x) nanstd(x,1)./sqrt(size(x,1)), tc,'uniformoutput',0);
+        se_tc = cellfun(@(x) nanstd(x)./sqrt(n), tc,'uniformoutput',0);
         
     % otherwise, just plot the single subject's data without standard error
     else

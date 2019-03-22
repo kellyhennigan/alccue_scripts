@@ -15,7 +15,7 @@ close all
 
 % define relevant directories
 mainDir = '/Users/kelly/cueexp_claudia';
-scriptsDir = [mainDir '/scripts_new']; % this should be the directory where this script is located
+scriptsDir = [mainDir '/scripts']; % this should be the directory where this script is located
 dataDir = [mainDir '/data'];
 figDir = [mainDir '/figures']; % where to save out figures
 
