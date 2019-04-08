@@ -37,12 +37,16 @@ dataDir='/Users/kelly/cueexp_claudia/data'
 
 
 # subject ids to process
-subjects='301'  # e.g. '301 308 309'
+subjects='B002'  # e.g. '301 308 309'
 
 t1_template=$dataDir/templates/TT_N27.nii # %s is data_dir
 
 func_template=$dataDir/templates/TT_N27_func_dim.nii # %s is data_dir
 
+
+# should t1 and functional data be aligned by AFNI in native space prior to 
+# xforming functional data to group space? 
+doFuncAnatCoreg=1
 
 #########################################################################
 ############################# RUN IT ###################################
@@ -91,9 +95,13 @@ do
 
 
 	# estimate xform between anatomy and functional data
-	align_epi_anat.py -epi2anat -epi vol1_cue_ns.nii.gz -anat t1_ns.nii.gz -epi_base 0 -tlrc_apar t1_tlrc_afni.nii.gz -epi_strip None -anat_has_skull no
+	if [ $doFuncAnatCoreg -eq 1 ]
+	then 
+		align_epi_anat.py -epi2anat -epi vol1_cue_ns.nii.gz -anat t1_ns.nii.gz -epi_base 0 -tlrc_apar t1_tlrc_afni.nii.gz -epi_strip None -anat_has_skull no
+	else	
+		adwarp -apar t1_tlrc_afni.nii.gz -dpar vol1_cue_ns.nii.gz -prefix vol1_cue_ns_tlrc_al -dxyz 2.9
+	fi
 
-	
 	# put in nifti format 
 	3dAFNItoNIFTI -prefix vol1_cue_tlrc_afni.nii.gz vol1_cue_ns_tlrc_al+tlrc
 

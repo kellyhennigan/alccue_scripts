@@ -25,6 +25,9 @@
 	# pp_cue_tlrc_afni.nii.gz - pre-processed data in tlrc space
 	# cue_wm_ts.1D, cue_csf_ts.1D, cue_nacc_ts.1D - 1d files containing time series for masks of white matter, CSF, and NAcc ROI
 	
+# set to 1 if func and t1 were aligned in native space automatically, set to 0 
+# if this was done manually
+doFuncAnatCoreg=1
 
 #########################################################################
 ########################## DEFINE VARIABLES #############################
@@ -110,7 +113,14 @@ do
 
 
 	# transform fmri data to tlrc space
-	3dAllineate -base t1_tlrc_afni.nii.gz -1Dmatrix_apply xfs/cue2tlrc_xform_afni -prefix pp_cue_tlrc_afni -input pp_cue.nii.gz -verb -master BASE -mast_dxyz 2.9 -weight_frac 1.0 -maxrot 6 -maxshf 10 -VERB -warp aff -source_automask+4 -onepass
+	# estimate xform between anatomy and functional data
+	if [ $doFuncAnatCoreg -eq 1 ]
+	then 
+		3dAllineate -base t1_tlrc_afni.nii.gz -1Dmatrix_apply xfs/cue2tlrc_xform_afni -prefix pp_cue_tlrc_afni -input pp_cue.nii.gz -verb -master BASE -mast_dxyz 2.9 -weight_frac 1.0 -maxrot 6 -maxshf 10 -VERB -warp aff -source_automask+4 -onepass
+	else	
+		adwarp -apar t1_tlrc_afni.nii.gz -dpar pp_cue.nii.gz -prefix pp_cue_tlrc_afni -dxyz 2.9
+	fi
+
 	3dAFNItoNIFTI -prefix pp_cue_tlrc_afni.nii.gz pp_cue_tlrc_afni+tlrc
 	rm pp_cue_tlrc_afni+tlrc*
 
