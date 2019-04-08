@@ -98,22 +98,26 @@ do
 	if [ $doFuncAnatCoreg -eq 1 ]
 	then 
 		align_epi_anat.py -epi2anat -epi vol1_cue_ns.nii.gz -anat t1_ns.nii.gz -epi_base 0 -tlrc_apar t1_tlrc_afni.nii.gz -epi_strip None -anat_has_skull no
+		
+		# clean up xform files 
+		mv t1_ns_al*aff12.1D xfs/t12cue_xform_afni; 
+		mv vol1_cue_ns_al_mat.aff12.1D xfs/cue2t1_xform_afni; 
+		mv vol1_cue_ns_al_tlrc_mat.aff12.1D xfs/cue2tlrc_xform_afni; 
+		rm vol1_cue_ns_al_reg_mat.aff12.1D; 
+		
+		# vol1_cue_ns_al.nii is vol1_cue aligned to t1 in native space
+		3dAFNItoNIFTI -prefix vol1_cue_ns_al.nii.gz vol1_cue_ns_al+orig
+		rm vol1_cue_ns_al+orig*
+
 	else	
 		adwarp -apar t1_tlrc_afni.nii.gz -dpar vol1_cue_ns.nii.gz -prefix vol1_cue_ns_tlrc_al -dxyz 2.9
 	fi
 
 	# put in nifti format 
 	3dAFNItoNIFTI -prefix vol1_cue_tlrc_afni.nii.gz vol1_cue_ns_tlrc_al+tlrc
-
-
-	# clean up intermediate files
 	rm vol1_cue_ns_tlrc_al+tlrc*
-	mv t1_ns_al*aff12.1D xfs/t12cue_xform_afni; 
-	mv vol1_cue_ns_al_mat.aff12.1D xfs/cue2t1_xform_afni; 
-	mv vol1_cue_ns_al_tlrc_mat.aff12.1D xfs/cue2tlrc_xform_afni; 
-	rm vol1_cue_ns_al_reg_mat.aff12.1D; 
-	rm vol1_cue_ns_al+orig*
 
+	
 
 done # subject loop
 

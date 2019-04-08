@@ -121,6 +121,7 @@ do
 		adwarp -apar t1_tlrc_afni.nii.gz -dpar pp_cue.nii.gz -prefix pp_cue_tlrc_afni -dxyz 2.9
 	fi
 
+	# afni > nifti format
 	3dAFNItoNIFTI -prefix pp_cue_tlrc_afni.nii.gz pp_cue_tlrc_afni+tlrc
 	rm pp_cue_tlrc_afni+tlrc*
 
