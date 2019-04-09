@@ -24,7 +24,7 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 
 % cell array of subject IDs to process (e.g., {'301','308','309'} )
 % subjects={'291','301','328'};
-subjects={'328','375'};
+subjects={'B002'};
 
 nTRs = 444;
 

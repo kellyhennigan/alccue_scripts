@@ -7,7 +7,9 @@
 % load roi binary mask files: volumes w/value of 1 signifying which voxels
 % are in the roi mask; otherwise 0 values
 
-% load pre-processed functional data & get averaged roi time courses
+% load pre-processed functional data 
+
+% load vector that says which volumes to censor based on bad motion
 
 % get stim-locked time series based on event onset files
 
@@ -36,7 +38,7 @@ figDir = [mainDir '/figures']; % where to save out figures
 path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 
 % cell array of subject IDs to process (e.g., {'301','308','309'} )
-subjects={'291','328','375'};
+subjects={'291','328','375','B002'};
 
 
 omitOTs=input('omit trials with outlier TRs? (outlier = zscore > 4) 1=yes 0=no ');
@@ -53,7 +55,8 @@ censorFilePath = fullfile(dataDir, ['%s/func_proc/cue_censor.1D']);
 
 
 % filepaths to ROI masks
-roiNames = {'nacc_desai','mpfc','ins_desai','VTA','acing'};
+% roiNames = {'nacc','mpfc','ins_desai','VTA','acing'};
+roiNames = {'nacc'};
 roiPath = fullfile(dataDir,'ROIs','%s_func.nii'); % %s is roiNames
 
 
@@ -124,12 +127,13 @@ for i=1:numel(subjects) % subject loop
         % trial
         roi_ts = [roi_ts;nan(nTRs,1)];
         
-        % set vols with abs(zscore > 4) to nan (assume this is due to
-        % some non-bio noise)
+        
+        % if desired, identify outlier TRs
         if omitOTs
             % temporarily assign censored vols due to head motion to nan
             temp = roi_ts; temp(censorVols)=nan;
-            censorVols=[censorVols;find(abs(zscore(temp(~isnan(temp))))>4)];
+            Z=(temp-nanmean(temp))./nanstd(temp); % Z-score
+            censorVols=[censorVols;find(abs(Z)>4)];
         end
         
         
@@ -150,23 +154,24 @@ for i=1:numel(subjects) % subject loop
                 % single trial time courses for this stim
                 this_stim_tc=roi_ts(this_stim_TRs);
                 
-                %%%%% TO ONLY OMIT CENSORED TRS:
-                %                 censor_idx=find(ismember(this_stim_TRs,censorVols));
-                %                 this_stim_tc(censor_idx)=nan;
-      
+                 %%%%% TO ONLY OMIT CENSORED TRS:
+                censor_idx=find(ismember(this_stim_TRs,censorVols));
+                [~,cc]=ind2sub(size(this_stim_TRs),censor_idx);
+                censored_trs = this_stim_tc(censor_idx);
+                this_stim_tc(censor_idx)=nan;
                 
-                %%%%%% TO OMIT ENTIRE TRIALS FROM AVERAGING THAT HAVE
-                %%%%%% CENSORED TRS:
                 
-                % identify & omit trials w/censored TRs
-                [censor_idx,~]=find(ismember(this_stim_TRs,censorVols));
-                censor_idx = unique(censor_idx);
-                censored_tc = this_stim_tc(censor_idx,:);
-                this_stim_tc(censor_idx,:) = [];
-               
+                %%%%%% TO OMIT ENTIRE TRIALS THAT CONTAIN CENSORED TRS:
+                %                 [censor_idx,~]=find(ismember(this_stim_TRs,censorVols));
+                %                 censor_idx = unique(censor_idx);
+                %                 censored_trs = this_stim_tc(censor_idx,:);
+                %                 this_stim_tc(censor_idx,:) = [];
+              
                 % keep count of the # of censored & outlier trials
-                nBadTrials{j}(i,k) = numel(censor_idx);
+                nBadTRs{j}(i,k) = numel(censored_trs);
                
+                % fill in timecourses cell array
+                TC{j,k}(i,:) = nanmean(this_stim_tc,1);
                 
                 % plot single trials
                 if plotSingleTrials
@@ -176,8 +181,14 @@ for i=1:numel(subjects) % subject loop
                     set(gca,'fontName','Arial','fontSize',12)
                     % plot good and bad (censored) single trials
                     plot(t,this_stim_tc','linewidth',1.5,'color',[.15 .55 .82])
-                    if ~isempty(censored_tc)
-                        plot(t,censored_tc','linewidth',1.5,'color',[1 0 0])
+                    if ~isempty(censored_trs)
+                        
+                        % IF OMITTING JUST CENSORED TRS:
+                        plot(t(cc),censored_trs,'*','color',[1 0 0],'markersize',20,'Linewidth',1.5)
+                        
+                        % IF OMITTING ENTIRE TRIALS THAT HAVE A CENSORED TR:
+                        % plot(t,censored_trs','linewidth',1.5,'color',[1 0 0])
+             
                     end
                     xlim([t(1) t(end)])
                     set(gca,'XTick',t)
@@ -197,7 +208,6 @@ for i=1:numel(subjects) % subject loop
                     print(gcf,'-dpng',fullfile(thisOutDir,outName));
                 end
                 
-                TC{j,k}(i,:) = nanmean(this_stim_tc);
                 
             end % isempty(onsetTRs)
             

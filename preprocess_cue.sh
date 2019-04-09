@@ -27,7 +27,7 @@
 	
 # set to 1 if func and t1 were aligned in native space automatically, set to 0 
 # if this was done manually
-doFuncAnatCoreg=1
+doFuncAnatCoreg=0
 
 #########################################################################
 ########################## DEFINE VARIABLES #############################
@@ -38,10 +38,10 @@ dataDir='/Users/kelly/cueexp_claudia/data'
 
 
 # subject ids to process
-subjects='301'  # e.g. '301 308 309'
+subjects='B002'  # e.g. '301 308 309'
 
-# threshold for determining which volumes should be censored due to "bad" motion 
-# (I use a threshold of .5 which is very stringent)
+# threshold for determining which volumes should be censored due to "bad" motion; 
+# unit roughly corresponds to mm; see "1d_tool.py help" for more info 
 censor_thresh=1
 
 # filepaths to ROI masks 
@@ -86,7 +86,7 @@ do
 
 	# create a “censor vector” that denotes bad movement volumes with a 0 and good volumes with a 1
 	# to be used later for glm estimation and making timecourses
-	1d_tool.py -infile vr_cue.1D[1..6] -show_censor_count -censor_prev_TR -censor_motion $censor_thresh cue
+	1d_tool.py -infile cue_vr.1D[1..6] -show_censor_count -censor_prev_TR -censor_motion $censor_thresh cue
 	rm cue_CENSORTR.txt
 	
 

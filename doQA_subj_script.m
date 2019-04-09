@@ -20,14 +20,14 @@ path(path,genpath(scriptsDir)); % add scripts dir to matlab search path
 
 task='cue';
 
-% cell array of subject ids to include in plots
-subjects={'301','375'};
+% cell array of subject ids to process
+subjects={'328','375','B002'};
 
 
 mp_file = [dataDir '/%s/func_proc/cue_vr.1D']; % motion param file 
 roits_file = [dataDir '/%s/func_proc/cue_nacc_ts.1D']; % roi time series file to plot 
 
-plotMotionLim = 1; % euclidean distance limit to plot; 
+motionThresh = 1; % euclidean distance limit to plot; 
 
 outDir = fullfile(figDir,'QA');
 
@@ -63,7 +63,7 @@ for s = 1:numel(subjects)
     
     en = [0;sqrt(sum(diff(mp).^2,2))]; % euclidean norm (head motion distance roughly in mm units)
     
-    nBadTRs = numel(find(en>plotMotionLim));
+    nBadTRs = numel(find(en>motionThresh));
     fprintf(['\nsubject ' subject ' has ' num2str(nBadTRs) ' bad motion vols,\n' ...
         'which is ' num2str(100.*nBadTRs./numel(en)) ' percent of cue task trials\n\n'])
     
@@ -80,7 +80,7 @@ for s = 1:numel(subjects)
     hold on
     plot(en,'color',[ 0.1490    0.5451    0.8235],'linewidth',1.5)
     set(gca,'box','off');
-    plot(ones(numel(en),1).*plotMotionLim,'color',[ 0.8627    0.1961    0.1843])
+    plot(ones(numel(en),1).*motionThresh,'color',[ 0.8627    0.1961    0.1843])
     ylabel('head motion (in ~mm units)','FontSize',12)
     
     title(sprintf('max displacement: ~ %.2f mm, at TR=%d',max_en,max_TR),'FontSize',14)
@@ -103,11 +103,3 @@ for s = 1:numel(subjects)
 end % subjects
 
 
-
-%% calculate tSNR
-
-%% show where censored TRs are
-
-
-
-%%

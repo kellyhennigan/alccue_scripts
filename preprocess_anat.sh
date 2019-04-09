@@ -46,7 +46,7 @@ func_template=$dataDir/templates/TT_N27_func_dim.nii # %s is data_dir
 
 # should t1 and functional data be aligned by AFNI in native space prior to 
 # xforming functional data to group space? 
-doFuncAnatCoreg=1
+doFuncAnatCoreg=0
 
 #########################################################################
 ############################# RUN IT ###################################
