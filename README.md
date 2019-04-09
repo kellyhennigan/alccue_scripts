@@ -39,8 +39,10 @@ to be able to execute them.
 this script does the following using AFNI commands:
 * skull strips t1 data using afni command "3dSkullStrip"
 * aligns skull-stripped t1 data to t1 template in tlrc space using afni command @auto_tlrc, which allows for a 12 parameter affine transform
-* pulls out the first volume of functional data to be co-registered to anatomy and skullstrips this volume using "3dSkullStrip"
-* coregisters anatomy to functional data, and then calculates the transform from native functional space to standard group space (tlrc space)
+* pulls out the first volume of functional data to transform to group (tlrc) space; this is done either by: 
+- co-registering anatomy and functional data in native space, then applying the func > anat transform and anat > tlrc transform in the same step, (doFuncAnatCoreg=1) or 
+- simply applying the anat > tlrc transform to the functional data (doFuncAnatCoreg=0). This assumes that the anatomy and functional data are already in good alignment in native space, either because the subject didn't move or because they've been manually aligned prior to running this script. 
+
 
 QUALITY CHECK:
 in afni viewer, load subject's anatomy and functional volume in tlrc space (files "t1_tlrc_afni.nii.gz" and "vol1_cue_tlrc_afni.nii.gz"). These should be reasonably aligned. If they aren't, that means 1) the anatomical <-> functional alignment in native space messed up, 2) the subject's anatomical <-> tlrc template alignment messed up, or 3) both messed up. 
@@ -113,9 +115,11 @@ to use AFNI's command 3dttest++ to perform t-ttests on subjects' brain maps
 ## QA
 <i>from matlab command line, type:</i> 
 ```
-doFuncQA_script
+doQA_subj_script 
+&
+doQA_group_script
 ```
-to save out some plots that display head motion
+to save out some plots that display head motion. Use doQA_group_script to help determine what the threshold should be for excluding subjects based on bad motion. 
 
 
 ## check out behavior
